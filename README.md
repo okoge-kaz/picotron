@@ -6,6 +6,12 @@ In the spirit of [NanoGPT](https://github.com/karpathy/nanoGPT), we created Pico
 
 - Performance is not the best but still under active development. We observed 38% MFU on a LLaMA-2-7B model using 64 H100 GPUs and nearly 50% MFU on the SmolLM-1.7B model with 8 H100 GPUs. Benchmarks will come soon
 
+# Tutorial videos
+
+- A step by step tutorial on how to build Picotron distributed training framework form scratch:
+    - [Picotron tutorial (playlist)](https://www.youtube.com/playlist?list=PL-_armZiJvAnhcRr6yTJ0__f3Oi-LLi9S) 🎬
+    - [Picotron tutorial (codebase)](https://github.com/huggingface/picotron_tutorial) 👷🏻‍♂️
+
 # Install
 
 ```
