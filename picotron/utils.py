@@ -105,7 +105,6 @@ def download_model(model_name, hf_token):
     # Download HF model safetensors at the "hf_model_safetensors" directory
     os.makedirs("hf_model_safetensors", exist_ok=True)
     print("Downloading SafeTensors files...")
-    os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
     snapshot_download(model_name, repo_type="model", local_dir="hf_model_safetensors", token=hf_token, allow_patterns=["*.safetensors", "*.json"])
     # Check if the model has SafeTensors files
     if not os.path.exists("hf_model_safetensors/model.safetensors"):
