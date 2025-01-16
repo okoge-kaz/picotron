@@ -76,8 +76,6 @@ if __name__ == "__main__":
     dtype = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.is_bf16_supported() and not config["distributed"]["use_cpu"] else torch.float32
     assert (dtype == torch.bfloat16 and os.getenv("FLASH_ATTEN") == "1") or os.getenv("FLASH_ATTEN") != "1", "Kernel operations requires dtype=torch.bfloat16"
 
-    download_model(config["model"]["name"], os.environ["HF_TOKEN"])
-
     local_rank = int(os.environ["LOCAL_RANK"])
     global_rank = int(os.environ["RANK"])
     world_size = int(os.environ["WORLD_SIZE"])
@@ -118,6 +116,10 @@ if __name__ == "__main__":
         subset_name=config["dataset"].get("subset_name", None),
         split=config["dataset"].get("split", "train")
     )
+
+    # download model on the first rank, assume all ranks have access to the same filesystem
+    if pgm.process_group_manager.global_rank == 0:
+        download_model(config["model"]["name"], os.environ["HF_TOKEN"])
 
     dist.barrier()
 
