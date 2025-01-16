@@ -4,7 +4,6 @@ CUDA_DEVICE_MAX_CONNECTIONS=1 debugpy-run -p 5678 -m torch.distributed.run -- --
 """
 import os
 import inspect
-import datetime
 import json
 import time
 import datetime
@@ -24,6 +23,7 @@ from picotron.process_group_manager import setup_process_group_manager
 from picotron.pipeline_parallel.pipeline_parallel import train_step_pipeline_1f1b, train_step_pipeline_afab, PipelineParallel
 from picotron.data_parallel.data_parallel import DataParallelBucket
 from picotron.model import Llama
+from .create_config import download_model
 import wandb
 
 def train_step(model, data_loader, device):
@@ -75,7 +75,9 @@ if __name__ == "__main__":
             print("Warning: HF_TOKEN is set in the environment and the config file. Using the environment variable.")
     dtype = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.is_bf16_supported() and not config["distributed"]["use_cpu"] else torch.float32
     assert (dtype == torch.bfloat16 and os.getenv("FLASH_ATTEN") == "1") or os.getenv("FLASH_ATTEN") != "1", "Kernel operations requires dtype=torch.bfloat16"
-    
+
+    download_model(config["model"]["name"], os.environ["HF_TOKEN"])
+
     local_rank = int(os.environ["LOCAL_RANK"])
     global_rank = int(os.environ["RANK"])
     world_size = int(os.environ["WORLD_SIZE"])

@@ -182,6 +182,20 @@ def create_single_config(
         json.dump(config_content, new_config, indent=4)
     del config_content
 
+def download_model(model_name, hf_token):
+    # Download HF model safetensors at the "hf_model_safetensors" directory
+    os.makedirs("hf_model_safetensors", exist_ok=True)
+
+    files_to_download = check_hf_model_files_existences(model_name, hf_token)
+    if len(files_to_download) <= 0:
+        raise FileNotFoundError("Safetensors files not found. Please check the model name and authentication token.")
+
+    is_downloaded = download_hf_model_files(files_to_download, model_name, hf_token, save_dir="hf_model_safetensors")
+    if not is_downloaded:
+        raise FileNotFoundError("Failed to download safetensors files. Please check the model name and authentication token.")
+
+    print("SafeTensors files downloaded successfully! ✅")
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--out_dir", type=str, help="Output directory to store the configs", default="tmp")
@@ -230,15 +244,6 @@ if __name__ == "__main__":
 
     print("Configs created successfully! ✅")
 
-    # Download HF model safetensors at the "hf_model_safetensors" directory
-    os.makedirs("hf_model_safetensors", exist_ok=True)
-
-    files_to_download = check_hf_model_files_existences(args.model_name, args.hf_token)
-    if len(files_to_download) <= 0:
-        raise FileNotFoundError("Safetensors files not found. Please check the model name and authentication token.")
-
-    is_downloaded = download_hf_model_files(files_to_download, args.model_name, args.hf_token, save_dir="hf_model_safetensors")
-    if not is_downloaded:
-        raise FileNotFoundError("Failed to download safetensors files. Please check the model name and authentication token.")
+    download_model(args.model_name, args.hf_token)
 
     print("SafeTensors files downloaded successfully! ✅")
