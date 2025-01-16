@@ -7,8 +7,7 @@ import numpy as np
 import builtins
 import fcntl
 
-from huggingface_hub import hf_hub_download, snapshot_download
-from safetensors import safe_open
+import huggingface_hub
 
 import picotron.process_group_manager as pgm
 import torch, torch.distributed as dist
@@ -104,8 +103,10 @@ def average_loss_across_dp_cp_ranks(loss, device):
 def download_model(model_name, hf_token):
     # Download HF model safetensors at the "hf_model_safetensors" directory
     os.makedirs("hf_model_safetensors", exist_ok=True)
+    huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER = True
     print("Downloading SafeTensors files...")
-    snapshot_download(model_name, repo_type="model", local_dir="hf_model_safetensors", token=hf_token, allow_patterns=["*.safetensors", "*.json"])
+    huggingface_hub.snapshot_download(model_name, repo_type="model", local_dir="hf_model_safetensors", token=hf_token,
+                                      allow_patterns=["*.safetensors", "*.json"])
     # Check if the model has SafeTensors files
     if not os.path.exists("hf_model_safetensors/model.safetensors"):
         raise ValueError(f"Model {model_name} does not have SafeTensors files.")
