@@ -66,11 +66,13 @@ if __name__ == "__main__":
     os.environ["TOKENIZERS_PARALLELISM"] = config["environment"]["TOKENIZERS_PARALLELISM"]
     os.environ["FLASH_ATTEN"] = config["environment"]["FLASH_ATTEN"]
     os.environ["DEVICE"] = "cpu" if config["distributed"]["use_cpu"] else "cuda"
-    if config["environment"].get("HF_TOKEN") is None and "HF_TOKEN" not in os.environ: raise ValueError("HF_TOKEN is neither set in the config file nor in the environment")
-    if config["environment"].get("HF_TOKEN") and "HF_TOKEN" not in os.environ:
-        os.environ["HF_TOKEN"] = config["environment"]["HF_TOKEN"]
+    if config["environment"].get("HF_TOKEN") is None:
+        if "HF_TOKEN" not in os.environ: raise ValueError("HF_TOKEN is neither set in the config file nor in the environment")
     else:
-        print("Warning: HF_TOKEN is set in the environment and the config file. Using the environment variable.")
+        if "HF_TOKEN" not in os.environ:
+            os.environ["HF_TOKEN"] = config["environment"]["HF_TOKEN"]
+        else:
+            print("Warning: HF_TOKEN is set in the environment and the config file. Using the environment variable.")
     dtype = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.is_bf16_supported() and not config["distributed"]["use_cpu"] else torch.float32
     assert (dtype == torch.bfloat16 and os.getenv("FLASH_ATTEN") == "1") or os.getenv("FLASH_ATTEN") != "1", "Kernel operations requires dtype=torch.bfloat16"
     
