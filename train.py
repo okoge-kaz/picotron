@@ -23,7 +23,7 @@ from picotron.process_group_manager import setup_process_group_manager
 from picotron.pipeline_parallel.pipeline_parallel import train_step_pipeline_1f1b, train_step_pipeline_afab, PipelineParallel
 from picotron.data_parallel.data_parallel import DataParallelBucket
 from picotron.model import Llama
-from .create_config import download_model
+from picotron.utils import download_model
 import wandb
 
 def train_step(model, data_loader, device):
