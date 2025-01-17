@@ -1,7 +1,4 @@
-import json
 import os
-import subprocess
-import requests
 import random
 import numpy as np
 import builtins
@@ -101,8 +98,13 @@ def average_loss_across_dp_cp_ranks(loss, device):
     return reduced_loss.item()
 
 def download_model(model_name, hf_token):
-    # Download HF model safetensors at the "hf_model_safetensors" directory
-    os.makedirs("hf_model_safetensors", exist_ok=True)
+    dst = os.path.join("hf_model", model_name)
+    os.makedirs(dst, exist_ok=True)
+    # check if model is already downloaded
+    if os.path.exists(os.path.join(dst, "config.json")):
+        print(f"Model {model_name} already exists at {dst}")
+        return
+    # Download HF model safetensors at the "dst" directory
     huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER = True
     print("Downloading SafeTensors files...")
     huggingface_hub.snapshot_download(model_name, repo_type="model", local_dir="hf_model_safetensors", token=hf_token,
