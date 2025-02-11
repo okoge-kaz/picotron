@@ -68,7 +68,7 @@ class BucketManager:
             grad_type (torch.dtype, optional): Data type of gradients, defaults to torch.float32.
         """
         self.params = list(params) # Convert parameter generator to a list.
-        self.device = torch.device("cuda") if self.params[0].is_cuda else torch.device("cpu")
+        self.device = self.params[0].device if self.params[0].is_cuda else torch.device("cpu")
         self.buckets = [] # List of buckets.
         self.process_group = process_group
         self.process_group_size = dist.get_world_size(group=self.process_group)

@@ -36,7 +36,7 @@ class DataParallelNaive(nn.Module):
         """
         for p in self.module.parameters():
             if p.requires_grad is True:
-                p.register_hook(hook)
+                p.register_post_accumulate_grad_hook(hook)
                 
     def _allreduce_grads(self, grad):
         """
