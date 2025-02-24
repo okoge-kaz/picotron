@@ -260,7 +260,7 @@ class Llama(nn.Module):
             layer.mlp.reset_parameters()
 
         self.final_norm.reset_parameters()
-        self.final_proj.reset_parameters
+        self.final_proj.reset_parameters()
 
     def forward(self, input_ids, attention_mask=None, position_ids: torch.Tensor = None):
         x = self.embedding(input_ids)
