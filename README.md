@@ -45,6 +45,20 @@ pip install -e .
     torchrun --nproc_per_node 8 train.py --config tmp/llama-1B-cpu/config.json
     ```
 
+# Citation
+If you use Picotron, please cite it as:
+
+```bibtex
+@misc{zhao2025picotron,
+  author = {Haojun Zhao and Ferdinand Mom},
+  title = {Picotron: Distributed training framework for education and research experimentation},
+  year = {2025},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/huggingface/picotron}}
+}
+```
+
 # Acknowledgements
 
 - [Megatron-LM](https://github.com/NVIDIA/Megatron-LM)
