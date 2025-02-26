@@ -50,7 +50,7 @@ pip install -e .
 If you use Picotron, please cite it as:
 
 ```bibtex
-@misc{picotron,
+@misc{zhao2025picotron,
   author = {Haojun Zhao and Ferdinand Mom},
   title = {Picotron: Distributed training framework for education and research experimentation},
   year = {2025},
